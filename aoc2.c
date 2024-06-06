@@ -30,7 +30,7 @@ static void run(void) {
     size_t sum_power_mincubes = 0;
 
     FILE *f = fopen("aoc2.txt", "r");
-    while (fscanf(f, " Game %d: ", &game) == 1) {
+    while (fscanf(f, /* Game 5: */ " Game %d: ", &game) == 1) {
         size_t power_cube = 1;
         int valid_game = 1; 
         char end = ' ';
@@ -40,10 +40,9 @@ static void run(void) {
 
         unsigned int maxred = 0, maxgreen = 0, maxblue = 0;
 
-        while (end != '\n' && fscanf(f, " %u %6s ", &qty, color) == 2) {
+        while (end != '\n' && fscanf(f, /* 1 red, 2 blue; 5 red, 3 green; 8 red\n */ " %u %6s ", &qty, color) == 2) {
             size_t len = strlen(color) - 1;
-            end = color[len];
-            end = end == ',' || end == ';' ? end : '\n';
+            end = color[len] == ',' || color[len] == ';' ? color[len] : '\n';
             color[len] = end == '\n' ? color[len] : '\0';
 
             update_max(&maxred, &maxgreen, &maxblue, qty, color[0]);
