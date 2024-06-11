@@ -2,9 +2,7 @@
 #include <time.h>
 #include <string.h>
 
-static const int REDC = 12;
-static const int GREENC = 13;
-static const int BLUEC = 14;
+enum { REDC = 12, GREENC = 13, BLUEC = 14 };
 
 static void update_max(unsigned int *red, unsigned int *green, unsigned int *blue, unsigned int qty, char color) {
     switch (color) {
