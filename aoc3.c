@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <time.h>
 
+static char * discard = 0;
+
 static inline int is_symbol(char c) {
     return c != '.' && c > ' ' && (c < '0' || c > '9');
 }
@@ -71,8 +73,8 @@ static void run(void) {
     int len = 0;
 
     FILE *f = fopen("aoc3.txt", "rb");
-        fgets(top, 255, f);
-        fgets(cur, 255, f);
+        discard = fgets(top, 255, f);
+        discard = fgets(cur, 255, f);
         len = (int)strlen(cur);
 
         while (fgets(bot, 255, f) != 0) {
@@ -92,6 +94,8 @@ static void run(void) {
         printf("Sum of parts: %zu, Sum of multparts: %zu \n", sum_parts, sum_mult_parts);
 
     fclose(f);
+
+    (void) discard;
 }
 
 int main(void) {
