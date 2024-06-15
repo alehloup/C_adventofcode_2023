@@ -62,7 +62,7 @@ static inline size_t mult_around(int pos, char * lines[3]) {
     return numbers[2] == 0 ? numbers[0] * numbers[1] : 0;
 }
 
-void run(void) {
+static void run(void) {
     char top[256] = "", cur[256] = "", bot[256] = "";
     char * lines[3] = {top, cur, bot};
 
@@ -97,7 +97,7 @@ void run(void) {
 int main(void) {
     clock_t bench = clock();
     run();
-    printf("\n runned in %.3f seconds \n", ((double)clock() - bench)/CLOCKS_PER_SEC);
+    printf("\n runned in %.3f seconds \n", (double)(clock() - bench)/CLOCKS_PER_SEC);
 
     return 0;
 }

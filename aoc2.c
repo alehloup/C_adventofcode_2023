@@ -15,9 +15,9 @@ static void update_max(unsigned int *red, unsigned int *green, unsigned int *blu
 
 static int is_invalid(unsigned int qty, char color) {
     switch (color) {
-        case 'r': return qty > REDC; break;
-        case 'g': return qty > GREENC; break;
-        case 'b': return qty > BLUEC; break;
+        case 'r': return qty > REDC;
+        case 'g': return qty > GREENC;
+        case 'b': return qty > BLUEC;
         default: return 1;
     }
 }
