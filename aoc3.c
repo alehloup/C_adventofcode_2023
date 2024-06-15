@@ -23,24 +23,52 @@ static inline size_t number_from_start(int pos, char line[256]) {
     return number;
 }
 
-static inline size_t sum_around(int pos, char top[256], char cur[256], char bot[256]) {
+static inline void numbers_around(int pos, char * lines[3], size_t out_numbers[9]) {
+    size_t count = 0;
+
+    for (int i = 0; i < 3; ++i) {
+        char * line = lines[i];
+
+        if (is_digit(line[pos])) {
+            out_numbers[count] = number_from_start(pos, line);
+            count += out_numbers[count] > 0 ? 1 : 0;
+        } else {
+            out_numbers[count] = number_from_start(pos-1, line);
+            count += out_numbers[count] > 0 ? 1 : 0;
+
+            out_numbers[count] = number_from_start(pos+1, line);
+            count += out_numbers[count] > 0 ? 1 : 0;
+        }
+    }
+    out_numbers[count] = 0;
+}
+
+static inline size_t sum_around(int pos, char * lines[3]) {
     size_t sum = 0;
-
-    sum += number_from_start(pos, top) 
-        + ( top[pos] == '.' ? number_from_start(pos-1, top) + number_from_start(pos+1, top) : (size_t)0 );
-
-    sum += number_from_start(pos-1, cur) + number_from_start(pos+1, cur);
-
-    sum += number_from_start(pos, bot)
-        + ( bot[pos] == '.' ? number_from_start(pos-1, bot) + number_from_start(pos+1, bot) : (size_t)0 ); 
+    size_t numbers[9] = {0};
+    
+    numbers_around(pos, lines, numbers);
+    for (int i = 0; numbers[i] != 0; ++i) {
+        sum += numbers[i];
+    }
 
     return sum;
 }
 
+static inline size_t mult_around(int pos, char * lines[3]) {
+    size_t numbers[9] = {0};
+    numbers_around(pos, lines, numbers);
+
+    return numbers[2] == 0 ? numbers[0] * numbers[1] : 0;
+}
+
 void run(void) {
     char top[256] = "", cur[256] = "", bot[256] = "";
+    char * lines[3] = {top, cur, bot};
+
+    size_t sum_parts = 0, sum_mult_parts = 0;
+
     int len = 0;
-    size_t sum_parts = 0;
 
     FILE *f = fopen("aoc3.txt", "rb");
         fgets(top, 255, f);
@@ -50,7 +78,10 @@ void run(void) {
         while (fgets(bot, 255, f) != 0) {
             for (int i = 0; i < len; ++i) {
                 if (is_symbol(cur[i])) {
-                    sum_parts += sum_around(i, top, cur, bot);
+                    sum_parts += sum_around(i, lines);
+                }
+                if (cur[i] == '*') {
+                    sum_mult_parts += mult_around(i, lines);
                 }
             }
 
@@ -58,7 +89,7 @@ void run(void) {
             memcpy(cur, bot, 255);
         }
 
-        printf("Sum of parts: %zu\n", sum_parts);
+        printf("Sum of parts: %zu, Sum of multparts: %zu \n", sum_parts, sum_mult_parts);
 
     fclose(f);
 }
